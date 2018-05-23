@@ -1,0 +1,16 @@
+{
+	"plugins": [
+		"transform-decorators-legacy",
+		"transform-object-rest-spread",
+		"transform-class-properties"
+	],
+	"presets": [
+		["env", {
+			"debug": true,
+			"targets": {
+					"node": 6
+				}
+			}
+		]
+	]
+}
