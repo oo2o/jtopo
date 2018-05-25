@@ -8,13 +8,13 @@
 	1. 美化节点形状
 - 0.1.0 初始化版本，从[JTopo](https://github.com/tuanjie54188/jtopo)copy代码并修改成在es6写法，支持导出功能
 #### 安装
-> npm install JTopo
+- npm install JTopo
 
 #### 实例
-> git clone https://github.com/oo2o/jtopo.git
-> cd jtopo/demo
-> yarn Or npm install
-> yarn run dev Or npm run dev
+- git clone https://github.com/oo2o/jtopo.git
+- cd jtopo/demo
+- yarn Or npm install
+- yarn run dev Or npm run dev
 
 ### API
 [JTopo](http://www.jtopo.com/) 相似
