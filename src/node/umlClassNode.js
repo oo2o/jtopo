@@ -1,13 +1,13 @@
 import Node from './node'
 
 export default class UMLClassNode extends Node {
-	constructor(name) {
-		super(name)
-		this.width = 168
-		this.className = name
-		this.style.fillStyle = '71, 167, 184'
-		this.rowHeight = 18
-		this.classObj = null
+	constructor(option) {
+		super(option)
+		this.width = option.width || 168
+		this.className = option.width || name
+		this.style.fillStyle = option.style.fillStyle || '71, 167, 184'
+		this.rowHeight = option.rowHeight || 18
+		this.classObj = option.classObj || null
 	}
 
 	draw(ctx, scale) {

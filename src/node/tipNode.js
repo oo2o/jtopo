@@ -1,10 +1,10 @@
 import Node from './node'
 
 export default class TipNode extends Node {
-	constructor(name) {
-		super(name)
-		this.width = 100
-		this.height = 100
+	constructor(option) {
+		super(option)
+		this.width = option.width || 100
+		this.height = option.height || 100
 	}
 
 	draw(ctx) {

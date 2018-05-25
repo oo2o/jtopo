@@ -1,10 +1,10 @@
 import Node from './node'
 
 export default class HeartNode extends Node {
-	constructor(name) {
-		super(name)
-		this.width = 120
-		this.height = 120
+	constructor(optiopn) {
+		super(optiopn)
+		this.width = optiopn.width || 120
+		this.height = optiopn.height || 120
 	}
 
 	draw(ctx) {

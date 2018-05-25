@@ -2,13 +2,11 @@ import AbstractNode from './abstractNode'
 
 export default class Node extends AbstractNode {
 
-	constructor(name) {
-		super(name)
-		this.name = name;
+	constructor(option) {
+		super(option)
+		this.name = option.name || '';
 		this.width = 35;
 		this.height = 35;
-		this.x = 0;
-		this.y = 0;
 		this.style = { fillStyle: '71, 167, 184', fontSize: '10pt', font: "Consolas" };
 		this.type = null;
 		this.selected = false;
@@ -16,7 +14,6 @@ export default class Node extends AbstractNode {
 		this.alpha = 1;
 		this.scala = 1;
 		this.rotate = 0
-		this.tip = null
 	}
 
 	drawText(ctx) {
@@ -69,7 +66,7 @@ export default class Node extends AbstractNode {
 		}
 		this.drawText(ctx);
 		if (this.isTipVisible) {
-			this.drawTip(ctx);
+			this.tip.draw(ctx, this);
 		}
 		ctx.restore();
 	}

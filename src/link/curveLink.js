@@ -1,7 +1,7 @@
 import Link from './link'
 
 export default class CurveLink extends Link {
-	constructor(nodeA, nodeB) {
+	constructor(nodeA, nodeB, name) {
 		super(nodeA, nodeB)
 		this.curve = '0.5'
 	}

@@ -3,26 +3,26 @@ import Element from '../element'
 import Tips from './tips'
 let ImageCache = {}
 export default class AbstractNode extends Element {
-	constructor(name){
+	constructor(option){
 		super()
-		this.id = null;
-		this.x = 0;
-		this.y = 0;
-		this.width = 0;
-		this.height = 0;
-		this.visible = true;
-		this.dragable = true;
-		this.text = name
-		this.name = name;
-		this.image = null;
-		this.color = null;
-		this.layout = null;
-		this.gravitate = null;//function(){};
-		this.parentContainer = null;
-		this.inContainer = null;
-		this.outContainer = null;
-		this.fixed = false;
-		this.tip = new Tips()
+		this.id = option.id || null;
+		this.x = option.x || 0;
+		this.y = option.y || 0;
+		this.width = option.width || 0;
+		this.height = option.height || 0;
+		this.visible = option.visible || true;
+		this.dragable = option.dragable || true;
+		this.text = option.text || option.name || ''
+		this.name = option.name || '';
+		this.image = option.image || null;
+		this.color = option.color || null;
+		this.layout = option.layout || null;
+		this.gravitate = option.gravitate || null;//function(){};
+		this.parentContainer = option.parentContainer || null;
+		this.inContainer = option.inContainer || null;
+		this.outContainer = option.outContainer || null;
+		this.fixed = option.fixed || false;
+		this.tip = new Tips(option.tip || {})
 	}
 
 	draw(ctx){

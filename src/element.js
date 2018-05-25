@@ -252,7 +252,12 @@ export default class Element {
 	onMouseover(event) { }
 	onMouseout(event) { }
 	onMousedrag(event) { }
+	onContextmenu(event){
 
+	}
+	contextmenu({event}){
+		this.onContextmenu(event)
+	}
 	mouseover({ e, event }) {
 		this.isOnMousOver = true;
 		this.isTipVisible = true;

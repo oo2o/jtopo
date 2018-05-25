@@ -1,10 +1,10 @@
 import Link from './link'
 
 export default class ArrowsLink extends Link {
-	constructor() {
+	constructor(nodeA, nodeB, name) {
 		super(nodeA, nodeB)
 		this.angle = '0.4'
-		this.offset = 30
+		this.offset = 10
 	}
 
 	draw(ctx) {
@@ -30,11 +30,9 @@ export default class ArrowsLink extends Link {
 
 			ctx.moveTo(this.nodeA.x + this.nodeA.width / 2, this.nodeA.y + this.nodeA.height / 2);
 			//ctx.lineTo(this.nodeB.x + this.nodeB.width / 2, this.nodeB.y + this.nodeB.height / 2);
-			ctx.lineTo(pointA.x + (pointB.x - pointA.x)/2, pointA.y + (pointB.y - pointA.y)/2);
-
-			ctx.moveTo(pointA.x , pointA.y);
 			ctx.lineTo(t.x, t.y);
 			ctx.lineTo(pointB.x, pointB.y);
+			ctx.moveTo(t.x, t.y);
 			ctx.lineTo(pointA.x , pointA.y);
 			if(this.style.fillStyle != null){
 				ctx.fill();

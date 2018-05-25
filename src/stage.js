@@ -4,20 +4,21 @@ import { Container } from './container'
 import { Link } from './link'
 
 export default class Stage {
-	constructor(canvas, isSacle, imageSrc, name) {
-		this.name = name;
-		this.canvas = canvas;
+	constructor(option) {
+		this.name = option.name || '';
+		this.canvas = option.canvas;
 		this.ctx = this.canvas.getContext("2d");
 		this.width = this.canvas.width;
 		this.height = this.canvas.height;
 		this.messageBus = new Util.MessageBus();
 		this.image = new Image();
-		this.image.src = imageSrc;
+		this.image.src = option.imageSrc || '';
 		this.scale = 1
-		this.isScale = isSacle || false
+		this.isScale = option.isScale || false
 		this.maxScale = 4
 		this.minScale = 0.5
 		this.init();
+		this.contextMenu = option.contextMenu || null
 	}
 
 	init() {
@@ -64,6 +65,14 @@ export default class Stage {
 				box.mousewheel(event)
 				event.preventDefault();
 				box.updateView()
+			}
+		}
+		if (this.contextMenu) {
+			this.canvas.oncontextmenu = function (event) {
+				event = event || window.event;
+				box.contextmenu(event)
+				event.preventDefault();
+				return false;
 			}
 		}
 		try {// IE !!
@@ -348,6 +357,9 @@ export default class Stage {
 		this.updateView();
 	}
 
+	contextmenu(event) {
+		this.selectedElements.forEach( node => node.contextmenu({event}))
+	}
 	subscribe(topic, action) {
 		this.messageBus.subscribe(topic, action);
 		return this;

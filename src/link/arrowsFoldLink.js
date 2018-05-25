@@ -1,11 +1,11 @@
 import Link from './link'
 
 export default class ArrowsFoldLink extends Link {
-	constructor() {
+	constructor(nodeA, nodeB, name) {
 		super(nodeA, nodeB)
 		this.fold = 'x'
 		this.angle = '0.4'
-		this.offset = 30
+		this.offset = 10
 	}
 
 	draw(ctx) {
@@ -83,13 +83,17 @@ export default class ArrowsFoldLink extends Link {
 				y: t.y + Math.sin(angle + da) * this.offset
 			};
 
-			ctx.lineTo(pointA.x + (pointB.x - pointA.x) / 2, pointA.y + (pointB.y - pointA.y) / 2);
+			// ctx.lineTo(pointA.x + (pointB.x - pointA.x) / 2, pointA.y + (pointB.y - pointA.y) / 2);
 
-			ctx.moveTo(pointA.x, pointA.y);
+			// ctx.moveTo(pointA.x, pointA.y);
+			// ctx.lineTo(t.x, t.y);
+			// ctx.lineTo(pointB.x, pointB.y);
+			// ctx.lineTo(pointA.x, pointA.y);
+
 			ctx.lineTo(t.x, t.y);
 			ctx.lineTo(pointB.x, pointB.y);
-			ctx.lineTo(pointA.x, pointA.y);
-
+			ctx.moveTo(t.x, t.y);
+			ctx.lineTo(pointA.x , pointA.y);
 			if (this.style.fillStyle != null) {
 				ctx.fill();
 			}

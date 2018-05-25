@@ -1,9 +1,9 @@
 import Node from './node'
 
 export default class GhomboidNode extends Node {
-	constructor(name) {
-		super(name)
-		this.offset = 10
+	constructor(optiopn) {
+		super(optiopn)
+		this.offset = optiopn.offset || 10
 	}
 
 	draw(ctx) {

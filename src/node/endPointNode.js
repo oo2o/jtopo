@@ -1,11 +1,12 @@
 import Node from './node'
 
 export default class EndPointNode extends Node {
-	constructor(name) {
-		super(name)
-		this.r = 30
-		this.beginDegree = 0
-		this.endDegree = 2 * Math.PI
+	constructor(option) {
+		super(option)
+		this.r = option.r || 30
+		this.beginDegree =option.beginDegree || 0
+		let endDegree = option.endDegree || 2
+		this.endDegree = endDegree * Math.PI
 	}
 
 	draw(ctx) {
