@@ -1,8 +1,8 @@
 
-import Element from './element'
+import Element from '../element'
+import Tips from './tips'
 let ImageCache = {}
 export default class AbstractNode extends Element {
-
 	constructor(name){
 		super()
 		this.id = null;
@@ -12,7 +12,7 @@ export default class AbstractNode extends Element {
 		this.height = 0;
 		this.visible = true;
 		this.dragable = true;
-
+		this.text = name
 		this.name = name;
 		this.image = null;
 		this.color = null;
@@ -22,6 +22,11 @@ export default class AbstractNode extends Element {
 		this.inContainer = null;
 		this.outContainer = null;
 		this.fixed = false;
+		this.tip = new Tips()
+	}
+
+	draw(ctx){
+
 	}
 
 	getName = function(){

@@ -10,8 +10,12 @@ export default class CircleNode extends Node {
 
 	draw(ctx) {
 		if (this.visible == false) return;
-		var w = this.r * 2 * this.scala;
-		var h = this.r * 2 * this.scala;
+		ctx.save();
+		ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+		ctx.rotate(this.rotate);
+		ctx.scale(this.scala, this.scala);
+		let w = this.r * 2 * this.scala;
+		let h = this.r * 2 * this.scala;
 		this.setWidth(w);
 		this.setHeight(h);
 		ctx.save();

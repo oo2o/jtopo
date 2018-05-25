@@ -1,12 +1,12 @@
 {
   "name": "jtopo",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "canvas operate",
   "main": "dist/index.js",
   "scripts": {
     "rimraf": "./node_modules/.bin/rimraf ./dist",
     "prepublish": "./node_modules/.bin/babel src --out-dir dist",
-    "dev": "npm exec 'babel src --watch --out-dir dist'",
+    "dev": "cd demo && npm run dev",
     "link-all": "npm link",
     "upgrade": "npm publish"
   },

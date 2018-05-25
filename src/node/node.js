@@ -1,4 +1,4 @@
-import AbstractNode from '../abstractNode'
+import AbstractNode from './abstractNode'
 
 export default class Node extends AbstractNode {
 
@@ -20,40 +20,26 @@ export default class Node extends AbstractNode {
 	}
 
 	drawText(ctx) {
-		let name = this.name;
-		if (!name || name == '') return;
-		let textWidth = ctx.measureText(name).width;
+		let text = this.text;
+		if (!text || text == '') return;
+		let textWidth = ctx.measureText(text).width;
 		ctx.font = this.style.fontSize + ' ' + this.style.font;
 		ctx.strokeStyle = 'rgba(230, 230, 230, ' + this.alpha + ')';
-		ctx.strokeText(name, -this.width / 2 + (this.width - textWidth) / 2, this.height / 2 + 12);
+		ctx.strokeText(text, -this.width / 2 + (this.width - textWidth) / 2, this.height / 2 + 12);
 	}
 
 	drawTip(ctx) {
-		let tip = this.tip;
-		if (!tip || tip == '') return;
-		let textWidth = ctx.measureText(tip).width;
-		ctx.save();
-		ctx.beginPath();
-		ctx.font = this.style.fontSize + ' ' + this.style.font;
-		ctx.strokeStyle = 'rgba(230, 230, 230, ' + this.alpha + ')';
-		if (textWidth > this.width) {
-			ctx.strokeText(tip, -this.wdith - 2, -this.y - 2);
-		} else {
-			ctx.strokeText(tip, -this.width() + this.getWidth() - textWidth - 2, this.getY() - 2);
-		}
-		ctx.stroke();
-		ctx.closePath();
-		ctx.restore();
+
 	}
 
 	drawSelectedRect(ctx) {
 		var textWidth = ctx.measureText(this.name).width;
-		var w = Math.max(this.width, textWidth);
+		var w = this.width
 		ctx.save();
 		ctx.beginPath();
 		ctx.strokeStyle = 'rgba(168,202,255, 0.9)';
 		ctx.fillStyle = 'rgba(168,202,236,0.5)';
-		ctx.rect(-w / 2 - 3, -this.height / 2 - 2, w + 6, this.height + 16);
+		ctx.rect(-w / 2 - 2, -this.height / 2 - 2, w + 4, this.height + 4);
 		ctx.fill();
 		ctx.stroke();
 		ctx.closePath();
@@ -65,12 +51,10 @@ export default class Node extends AbstractNode {
 		ctx.save();
 		ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
 		ctx.rotate(this.rotate);
-		ctx.scale(this.scala, this.scala);
 
-		if (this.isSelected || this.isFocus) {
+		if (this.selected || this.focus) {
 			this.drawSelectedRect(ctx);
 		}
-
 		let image = this.getImage();
 		if (image != null) {
 			//ctx.rect(-this.width/2, -this.height/2, this.width, this.height);

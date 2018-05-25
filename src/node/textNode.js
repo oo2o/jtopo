@@ -23,7 +23,7 @@ export default class TextNode extends Node{
 			var width = Math.max(this.width, textWidth);
 			ctx.save();
 			ctx.beginPath();
-			ctx.rect(startx-3, this.y-1, width+6, this.height+20);
+			ctx.rect(startx-3, this.y-1, width+6, this.height+2);
 			ctx.fill();
 			ctx.stroke();
 			ctx.closePath();

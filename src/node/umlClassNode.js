@@ -10,7 +10,7 @@ export default class UMLClassNode extends Node {
 		this.classObj = null
 	}
 
-	draw(ctx) {
+	draw(ctx, scale) {
 		if (!this.visible) return;
 		if (this.classObj != null) {
 			this.operations = [];
@@ -31,6 +31,7 @@ export default class UMLClassNode extends Node {
 		if (this.attributes == null || this.attributes.length == 0) {
 			this.attributes = [' '];
 		}
+
 		this.height = (this.operations.length + this.attributes.length + 1) * this.rowHeight + 3;
 		ctx.save();
 		ctx.beginPath();
@@ -64,5 +65,6 @@ export default class UMLClassNode extends Node {
 		ctx.stroke();
 		ctx.closePath();
 		ctx.restore();
+		ctx.scale(1, 1)
 	}
 }

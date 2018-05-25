@@ -5,5 +5,6 @@ import GhomboidNode from './ghomboidNode'
 import HeartNode from './heartNode'
 import TextNode from './textNode'
 import TipNode from './tipNode'
+import UMLClassNode from './umlClassNode'
 
-export { Node, CircleNode, EndPointNode, GhomboidNode, HeartNode, TextNode, TipNode }
+export { Node, CircleNode, EndPointNode, GhomboidNode, HeartNode, TextNode, TipNode, UMLClassNode }

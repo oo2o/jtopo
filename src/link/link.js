@@ -2,10 +2,11 @@ import Element from '../element'
 import { getDistance } from '../util'
 
 export default class Link extends Element {
-	constructor() {
+	constructor(nodeA, nodeB, name) {
 		super()
 		this.nodeA = nodeA;
 		this.nodeB = nodeB;
+		this.name = name
 		this.style = { strokeStyle: '116, 166, 250', alpha: 1, lineWidth: 2 };
 	}
 

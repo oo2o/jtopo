@@ -1,7 +1,7 @@
 import Link from './link'
 
 export default class FoldLink extends Link {
-	constructor() {
+	constructor(nodeA, nodeB) {
 		super(nodeA, nodeB)
 		this.fold = 'x'
 	}

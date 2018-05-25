@@ -21,161 +21,168 @@ export default class Element {
 		return this.floatMenu;
 	}
 
-	setFloatMenu (m) {
+	setFloatMenu(m) {
 		this.floatMenu = m;
 		return this;
 	}
 
-	isFloatMenuVisible () {
+	isFloatMenuVisible() {
 		return this.floatMenuVisible;
 	}
 
-	setFloatMenuVisible (v) {
+	setFloatMenuVisible(v) {
 		this.floatMenuVisible = v;
 		return this;
 	}
 
-	setX (x) {
+	setX(x) {
 		this.x = x;
 		return this;
 	}
 
-	setY (y) {
+	setY(y) {
 		this.y = y;
 		return this;
 	}
 
-	getX () {
+	getX() {
 		return this.x;
 	}
 
-	getY () {
+	getY() {
 		return this.y;
 	}
 
-	getLocation (x, y) {
+	getLocation(x, y) {
 		return { x: this.getX(), y: this.getY() };
 	}
 
-	setLocation (x, y) {
+	setLocation(x, y) {
 		this.setX(x);
 		this.setY(y);
 		return this;
 	}
 
-	getWidth () {
+	getWidth() {
 		return this.width;
 	}
 
-	setWidth (width) {
+	setWidth(width) {
 		this.width = width;
 		return this;
 	}
 
-	getHeight () {
+	getHeight() {
 		return this.height;
 	}
 
-	setHeight (height) {
+	setHeight(height) {
 		this.height = height;
 		return this;
 	}
 
-	getSize () {
+	getSize() {
 		return { width: this.getWidth(), height: this.getHeight() };
 	}
 
-	setSize (width, height) {
+	setSize(width, height) {
 		this.setWidth(width);
 		this.setHeight(height);
 		return this;
 	}
 
-	setBound (x, y, width, height) {
+	setBound(x, y, width, height) {
 		this.setLocation(x, y);
 		this.setSize(width, height);
 		return this;
 	}
 
-	getBound () {
+	getBound() {
 		return {
 			left: this.getX(), top: this.getY(),
 			right: this.getX() + this.getWidth(), bottom: this.getY() + this.getHeight()
 		};
 	}
 
-	isVisible () {
+	isVisible() {
 		return this.visible;
 	}
 
-	setVisible (v) {
+	setVisible(v) {
 		this.visible = v;
 		return this;
 	}
 
-	isDragable () {
+	isDragable() {
 		return this.dragable;
 	}
 
-	setDragable (d) {
+	setDragable(d) {
 		this.dragable = d;
 		return this;
 	}
 
-	isSelected () {
+	isSelected() {
 		return this.selected;
 	}
 
-	setSelected (s) {
+	setSelected(s) {
 		this.selected = s;
 		return this;
 	}
 
-	isFocus () {
+	isFocus() {
 		return this.focus;
 	}
 
-	setFocus (f) {
+	setFocus(f) {
 		this.focus = f;
 		return this;
 	}
 
-	onFocus () {
+	onFocus() {
 		this.setFocus(true);
 		return this;
 	}
 
-	loseFocus () {
+	loseFocus() {
 		this.setFocus(false);
 		return this;
 	}
 
-	setTip (tip) {
+	setTip(tip) {
 		this.tip = tip;
 		return this;
 	}
 
-	getTip () {
+	getTip() {
 		return this.tip;
 	}
 
-	onMousedown (e) {
-		console.log(this);
+	mousedown({ e, event }) {
 		this.setSelected(true);
 		this.mousedownX = e.x;
 		this.mousedownY = e.y;
 		this.selectedLocation = { x: this.getX(), y: this.getY() };
+		this.onMousedown(event)
 	}
 
-	onMouseselected () {
+	onMouseselected() {
+		// this.setSelected(true);
+		// this.selectedLocation = { x: this.getX(), y: this.getY() };
+	}
+
+	mouseselected(){
 		this.setSelected(true);
 		this.selectedLocation = { x: this.getX(), y: this.getY() };
+		this.onMouseselected()
 	}
 
-	goBack (box) {
+	goBack(box) {
 	}
 
-	onMouseup (e) {
+	mouseup({ e, event }) {
+		console.log('mouseup', 'ele')
 		this.mouseupX = e.x;
 		this.mouseupY = e.y;
 		let x = e.x;
@@ -197,7 +204,7 @@ export default class Element {
 					if (this.lastParentNode && this.lastParentNode.layout && this.lastParentNode.layout.auto == true) {
 						box.layoutNode(this.lastParentNode);
 					}
-					box.publish('gravitate', $.extend({}, gravitateMsg));
+					box.publish('gravitate', { ...gravitateMsg});
 					break;
 				}
 			}
@@ -232,26 +239,35 @@ export default class Element {
 			box.layoutNode(this);
 		}
 		this.isOnMousedrag = false;
+		this.onMouseup(event)
 	}
 
-	cancleSelected () {
+	cancleSelected() {
 		this.setSelected(false);
 		this.selectedLocation = null;
 	}
 
-	onMouseover (e) {
+	onMousedown(event) { }
+	onMouseup(event) { }
+	onMouseover(event) { }
+	onMouseout(event) { }
+	onMousedrag(event) { }
+
+	mouseover({ e, event }) {
 		this.isOnMousOver = true;
 		this.isTipVisible = true;
 		this.setFocus(true);
+		this.onMouseover(event)
 	}
 
-	onMouseout (e) {
+	mouseout({ e, event }) {
 		this.isOnMousOver = false;
 		this.isTipVisible = false;
 		this.setFocus(false);
+		this.onMouseout(event)
 	}
 
-	onMousedrag (e) {
+	mousedrag({ e, event }) {
 		this.isOnMousedrag = true;
 		let dx = e.dx;
 		let dy = e.dy;
@@ -291,5 +307,6 @@ export default class Element {
 			}
 		}
 		this.isIndrag = true;
+		this.onMousedrag(event)
 	}
 }

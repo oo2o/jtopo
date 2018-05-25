@@ -1,4 +1,4 @@
-import { Node, CircleNode, EndPointNode, GhomboidNode, HeartNode, TextNode, TipNode } from './node'
+import { Node, CircleNode, EndPointNode, GhomboidNode, HeartNode, TextNode, TipNode, UMLClassNode } from './node'
 import Stage from './stage'
 import Scene from './scene'
 import { Link, FoldLink, CurverLink, ArrowsLink, ArrowsFoldLink } from './link'
@@ -15,6 +15,7 @@ const JTopo = {
 	HeartNode: HeartNode,
 	TextNode: TextNode,
 	TipNode: TipNode,
+	UMLClassNode: UMLClassNode,
 	Stage: Stage,
 	Scene: Scene,
 	Link: Link,

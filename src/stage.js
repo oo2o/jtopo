@@ -4,7 +4,7 @@ import { Container } from './container'
 import { Link } from './link'
 
 export default class Stage {
-	constructor(canvas, name) {
+	constructor(canvas, isSacle, name) {
 		this.name = name;
 		this.canvas = canvas;
 		this.ctx = this.canvas.getContext("2d");
@@ -12,7 +12,11 @@ export default class Stage {
 		this.height = this.canvas.height;
 		this.messageBus = new Util.MessageBus();
 		this.image = new Image();
-		this.image.src = '/files/aa.png';
+		this.image.src = '/static/aa.png';
+		this.scale = 1
+		this.isScale = isSacle || false
+		this.maxScale = 4
+		this.minScale = 0.5
 		this.init();
 	}
 
@@ -21,7 +25,7 @@ export default class Stage {
 		this.ctx.shadowColor = 'rgba(0,0,0,0.5)';
 		this.ctx.shadowOffsetX = 3;
 		this.ctx.shadowOffsetY = 6;
-		this.ctx.scale(1,1)
+		this.ctx.scale(this.scale, this.scale)
 
 		this.startDragMouseX = 0;
 		this.startDragMouseY = 0;
@@ -39,25 +43,60 @@ export default class Stage {
 		let box = this;
 		this.canvas.onmousedown = function (event) {
 			box.isMousedown = true;
+			box.canvas.style.cursor = 'move'
 			box.mousedown(event);
+			event.preventDefault();
 		};
+		this.canvas.onresize = function (event) {
+			box.offset = box.canvas.getBoundingClientRect()
+		}
 		this.canvas.onmousemove = function (event) {
 			box.mousemove(event);
 		};
 		this.canvas.onmouseup = function (event) {
 			box.isMousedown = false;
+			box.canvas.style.cursor = 'default'
 			box.mouseup(event);
 		};
+		if (this.isScale) {
+			this.canvas.onmousewheel = function (event) {
+				event = event || window.event;
+				box.mousewheel(event)
+				event.preventDefault();
+				box.updateView()
+			}
+		}
 		try {// IE !!
 			window.addEventListener('keydown', function (e) {
 				box.keydown(e);
+				e.preventDefault();
 			}, true);
 			window.addEventListener('keyup', function (e) {
 				box.keyup(e);
+				e.preventDefault();
 			}, true);
 		} catch (e) { }
 
-		setTimeout(function () { box.updateView() }, 300);
+		setTimeout(() => {
+			box.offset = box.canvas.getBoundingClientRect();
+			box.updateView()
+		}, 300);
+	}
+
+	attachMousewheel() {
+		let box = this
+		this.canvas.onmousewheel = function (event) {
+			event = event || window.event;
+			box.mousewheel(event)
+			event.preventDefault();
+			box.updateView()
+		}
+		this.isScale = true
+	}
+
+	cancleMousewheel() {
+		this.canvas.onmousewheel = null
+		this.isScale = false
 	}
 
 	getElementByXY(x, y) {
@@ -111,16 +150,52 @@ export default class Stage {
 		this.selectedElements = [];
 	};
 
+	/**
+	 *	鼠标滚轮滚动， 缩放
+	 * @param {Event} event
+	 */
+	mousewheel(event) {
+		let scale = 1;
+		if (event.wheelDelta > 0) {
+			if (this.scale >= this.maxScale) {
+				return
+			}
+			scale = 2;
+
+		} else {
+			if (this.scale <= this.minScale) {
+				return
+			}
+			scale = 0.5
+		}
+		this.scale *= scale
+		const xy = Util.getXY(this, event)
+		const newXy = { x: xy.x * 2, y: xy.y * 2 }
+		this.links.forEach(link => link.style.lineWidth *= scale)
+		this.containers.forEach(container => {
+			container.width *= scale
+			container.height *= scale
+			container.x = container.x * scale
+			container.y = container.y * scale
+		})
+		this.nodes.forEach(node => {
+			node.width *= scale
+			node.height *= scale
+			node.x = node.x * scale
+			node.y = node.y * scale
+		})
+	}
+
 	mousedown(event) {
 		let xy = Util.getXY(this, event);
 		let x = xy.x;
 		let y = xy.y;
 
 		let selectedNode = this.getElementByXY(x, y);
-		if (selectedNode != null) {
-			selectedNode.onMousedown({ x: x, y: y, context: this });
+		if (selectedNode && selectedNode != null) {
+			selectedNode.mousedown({ e: { x: x, y: y, context: this }, event });
 			this.currElement = selectedNode;
-		} else if (this.currElement) {
+		} else if (this.currElement && this.currElement != null) {
 			this.currElement.cancleSelected();
 			this.currElement = null;
 		}
@@ -142,6 +217,10 @@ export default class Stage {
 			node.selectedLocation = { x: node.x, y: node.y };
 		}
 
+		if (!this.currElement || this.currElement == null) {
+			console.log('mousedown')
+			this.nodes.forEach(node => node.selectedLocation = { x: node.getX(), y: node.getY() })
+		}
 		this.isOnMouseDown = true;
 		this.publish('mousedown', { target: this.currElement, x: x, y: y, context: this });
 	}
@@ -162,24 +241,23 @@ export default class Stage {
 			if (node.x + node.width < 0 || node.x > this.canvas.width) continue;
 
 			if (x > node.x && x < node.x + node.width && y > node.y && y < node.y + node.height) {
-				node.onMouseover({ x: x, y: y, dx: dx, dy: dy, context: this });
+				node.mouseover({ e: { x: x, y: y, dx: dx, dy: dy, context: this }, event });
 				this.publish('mouseover', { target: node, x: x, y: y, dx: dx, dy: dy, context: this });
 			} else {
 				if (node.isOnMousOver) {
-					node.onMouseout({ x: x, y: y, dx: dx, dy: dy, context: this });
+					node.mouseout({ e: { x: x, y: y, dx: dx, dy: dy, context: this }, event });
 					this.publish('mouseout', { target: node, x: x, y: y, dx: dx, dy: dy, context: this });
 				}
 			}
 		}
-
 		if (this.currElement && this.isOnMouseDown && this.currElement.isDragable()) {
-			this.selectedElements.forEach( node => node.onMousedrag({ x: x, y: y, dx: dx, dy: dy, context: this }) )
+			this.selectedElements.forEach(node => node.mousedrag({ e: { x: x, y: y, dx: dx, dy: dy, context: this }, event }))
 			// for (let i = 0; i < this.selectedElements.length; i++) {
 			// 	let node = this.selectedElements[i];
-			// 	node.onMousedrag({ x: x, y: y, dx: dx, dy: dy, context: this });
+			// 	node.mousedrag({ x: x, y: y, dx: dx, dy: dy, context: this });
 			// }
 			this.publish('mousedrag', { target: this.currElement, x: x, y: y });
-		} else if (this.isOnMouseDown && this.isRangeSelectable) {
+		} else if (this.isOnMouseDown && this.isRangeSelectable && !this.isScale) {
 			let startx = x >= this.startDragMouseX ? this.startDragMouseX : x;
 			let starty = y >= this.startDragMouseY ? this.startDragMouseY : y;
 			let width = Math.abs(x - this.startDragMouseX);
@@ -195,26 +273,16 @@ export default class Stage {
 
 				if (node.x > startx && node.x + node.width < startx + width) {
 					if (node.y > starty && node.y + node.height < starty + height) {
-						node.onMouseselected({ x: x, y: y, dx: dx, dy: dy, context: this });
+						node.mouseselected({ e: { x: x, y: y, dx: dx, dy: dy, context: this }, event });
 						this.selectedElements.push(node);
 					}
 				} else {
 					node.cancleSelected();
 				}
 			})
-			// for (let i = 0; i < this.nodes.length; i++) {
-			// 	let node = this.nodes[i];
-			// 	if (node.x + node.width < 0 || node.x > this.canvas.width) continue;
-
-			// 	if (node.x > startx && node.x + node.width < startx + width) {
-			// 		if (node.y > starty && node.y + node.height < starty + height) {
-			// 			node.onMouseselected({ x: x, y: y, dx: dx, dy: dy, context: this });
-			// 			this.selectedElements.push(node);
-			// 		}
-			// 	} else {
-			// 		node.cancleSelected();
-			// 	}
-			// }
+		} else if (this.isOnMouseDown && this.isScale) {
+			this.nodes.forEach(node => node.mousedrag({ e: { x: x, y: y, dx: dx, dy: dy, context: this }, event }))
+			this.publish('mousedrag', { target: this.currElement, x: x, y: y });
 		}
 	}
 
@@ -227,11 +295,10 @@ export default class Stage {
 
 		this.publish('mouseup', { target: this.currElement, x: x, y: y, dx: dx, dy: dy, context: this });
 		this.startDragMouseX = null;
-
+		console.log('mouseup', 'stage')
 		if (this.currElement) {
-			this.currElement.onMouseup({ x: x, y: y, context: this, dx: dx, dy: dy });
+			this.currElement.mouseup({ e: { x: x, y: y, context: this, dx: dx, dy: dy }, event });
 		}
-
 		this.updateView();
 		this.isOnMouseDown = false;
 	}
@@ -239,8 +306,8 @@ export default class Stage {
 	keydown(e) {
 		let keyID = e.keyCode ? e.keyCode : e.which;
 		this.publish('keydown', keyID);
-		this.updateView();
-		return;
+		// this.updateView();
+		// return;
 
 		if (keyID === 17) { // Ctrl
 		}
@@ -441,7 +508,7 @@ export default class Stage {
 
 	updateView() {
 		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
+		// this.ctx.scale(this.scareX, this.scareY);
 		if (this.image != null) {
 			this.ctx.drawImage(this.image, 0, 0, this.width, this.height);
 		}
