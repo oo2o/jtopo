@@ -4,7 +4,7 @@ import { Container } from './container'
 import { Link } from './link'
 
 export default class Stage {
-	constructor(canvas, isSacle, name) {
+	constructor(canvas, isSacle, imageSrc, name) {
 		this.name = name;
 		this.canvas = canvas;
 		this.ctx = this.canvas.getContext("2d");
@@ -12,7 +12,7 @@ export default class Stage {
 		this.height = this.canvas.height;
 		this.messageBus = new Util.MessageBus();
 		this.image = new Image();
-		this.image.src = '/static/aa.png';
+		this.image.src = imageSrc;
 		this.scale = 1
 		this.isScale = isSacle || false
 		this.maxScale = 4

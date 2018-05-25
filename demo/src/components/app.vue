@@ -9,7 +9,7 @@
 	import JTopo from  'JTopo'
 	export default {
 		mounted(){
-			let stage = new JTopo.Stage(this.$refs.test, true, 'aa')
+			let stage = new JTopo.Stage(this.$refs.test, true, '/static/aa.png', 'aa')
 			var scene = new JTopo.Scene(stage); // 创建一个场景对象
 
       var node = new JTopo.Node("Hello");    // 创建一个节点
