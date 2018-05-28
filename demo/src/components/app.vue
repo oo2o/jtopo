@@ -53,7 +53,7 @@
         x: 400,
         y: 200
       }
-      let node3 = new JTopo.Node(node3Option);
+      let node3 = new JTopo.HeartNode(node3Option);
       stage.add(node3)
       let link2 = new JTopo.ArrowsFoldLink(node, node3,'link2')
       stage.add(link2)
