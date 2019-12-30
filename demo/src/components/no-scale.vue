@@ -21,7 +21,7 @@
       var node = new JTopo.Node("Hello");    // 创建一个节点
 			var node2 = new JTopo.Node('hello2');
       node.setLocation(300,200);    // 设置节点坐标
-			node.setTip('test')
+			// node.setTip('test')
       stage.add(node); // 放入到场景中
 			node2.setLocation(100, 200)
 			stage.add(node2)

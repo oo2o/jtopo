@@ -2,7 +2,7 @@
 
 export default class Element {
 	constructor() {
-
+		this.selectedLocation = null // 鼠标点击的位置
 	}
 
 	draw() {

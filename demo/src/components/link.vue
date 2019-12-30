@@ -16,11 +16,30 @@
       }
 			let stage = new JTopo.Stage(option)
 			var scene = new JTopo.Scene(stage); // 创建一个场景对象
-
-      var node = new JTopo.Node("Hello");    // 创建一个节点
-			var node2 = new JTopo.Node('hello2');
+      let node1Option = {
+        name: 'hello',
+        text: 'test',
+        tip: {
+          text: '刘妙想',
+          type: 'Top'
+        },
+        x: 300,
+        y: 200
+      }
+      let node2Option = {
+        name: 'hello2',
+        text: 'test',
+        tip: {
+          text: 'text',
+          type: 'Top'
+        },
+        x: 100,
+        y: 200
+      }
+      var node = new JTopo.Node(node1Option);    // 创建一个节点
+			var node2 = new JTopo.Node(node2Option);
       node.setLocation(300,200);    // 设置节点坐标
-			node.setTip('test')
+			// node.setTip('test')
       stage.add(node); // 放入到场景中
 			node2.setLocation(100, 200)
 			stage.add(node2)
